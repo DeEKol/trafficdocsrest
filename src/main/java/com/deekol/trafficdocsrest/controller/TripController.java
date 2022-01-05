@@ -17,7 +17,7 @@ import com.deekol.trafficdocsrest.domain.TripEntity;
 import com.deekol.trafficdocsrest.repository.TripRepository;
 
 @RestController
-@RequestMapping("trip")
+@RequestMapping("/api/trip")
 public class TripController {
 private final TripRepository tripRepository;
 	
