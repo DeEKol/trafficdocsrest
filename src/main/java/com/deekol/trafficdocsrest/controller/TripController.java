@@ -19,7 +19,7 @@ import com.deekol.trafficdocsrest.repository.TripRepository;
 @RestController
 @RequestMapping("/api/trip")
 public class TripController {
-private final TripRepository tripRepository;
+	private final TripRepository tripRepository;
 	
 	public TripController(TripRepository tripRepository) {
 		this.tripRepository = tripRepository;
