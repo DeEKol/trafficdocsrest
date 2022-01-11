@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import com.deekol.trafficdocsrest.domain.enums.EAppartmentUnit;
-import com.deekol.trafficdocsrest.domain.enums.EBusinessStructures;
+import com.deekol.trafficdocsrest.domain.enums.EBusinessStructure;
 import com.deekol.trafficdocsrest.domain.enums.EHouseUnit;
 import com.deekol.trafficdocsrest.domain.enums.ESettlement;
 import com.deekol.trafficdocsrest.domain.enums.EStreetUnit;
@@ -24,16 +24,19 @@ public class Participant {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	private String type;
+	@Column(name = "business_structure")
+	@Enumerated(EnumType.STRING)
+	private EBusinessStructure eBusinessStructure;
+	
 	private String name;
 	private String email;
 	private String inn;
 	private String kpp;
 	
 	
-	@Column(name = "business_structures_bank")
+	@Column(name = "business_structure_bank")
 	@Enumerated(EnumType.STRING)
-	private EBusinessStructures eBusinessStructuresBank;
+	private EBusinessStructure eBusinessStructureBank;
 	
 	private String bank;
 	private String bik;
@@ -76,4 +79,34 @@ public class Participant {
 	private EAppartmentUnit eAppartmentUnit;
 	
 	private String appartment;
+
+	public Participant(EBusinessStructure eBusinessStructure, String name, String email, String inn, String kpp,
+			EBusinessStructure eBusinessStructureBank, String bank, String bik, String accountOfBank, String account,
+			String locationIndex, ESubFederalUnit eSubFederalUnit, String region, ESettlement eSettlement, String city,
+			EStreetUnit eStreetUnit, String street, EHouseUnit eHouseUnit, String house,
+			EAppartmentUnit eAppartmentUnit, String appartment) {
+		super();
+		this.eBusinessStructure = eBusinessStructure;
+		this.name = name;
+		this.email = email;
+		this.inn = inn;
+		this.kpp = kpp;
+		this.eBusinessStructureBank = eBusinessStructureBank;
+		this.bank = bank;
+		this.bik = bik;
+		this.accountOfBank = accountOfBank;
+		this.account = account;
+		this.locationIndex = locationIndex;
+		this.eSubFederalUnit = eSubFederalUnit;
+		this.region = region;
+		this.eSettlement = eSettlement;
+		this.city = city;
+		this.eStreetUnit = eStreetUnit;
+		this.street = street;
+		this.eHouseUnit = eHouseUnit;
+		this.house = house;
+		this.eAppartmentUnit = eAppartmentUnit;
+		this.appartment = appartment;
+	}
+	
 }

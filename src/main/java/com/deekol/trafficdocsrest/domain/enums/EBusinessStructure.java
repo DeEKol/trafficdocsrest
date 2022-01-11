@@ -1,6 +1,6 @@
 package com.deekol.trafficdocsrest.domain.enums;
 
-public enum EBusinessStructures {
+public enum EBusinessStructure {
 	ИП,
 	ООО,
 	АО;
