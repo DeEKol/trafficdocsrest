@@ -3,16 +3,16 @@ package com.deekol.trafficdocsrest.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.deekol.trafficdocsrest.domain.enums.EQuantityUnit;
@@ -32,19 +32,20 @@ public class TripEntity {
 	private LocalDate date;
 	private Integer quantity;
 	
+	@Column(name = "quantity_unit")
 	@Enumerated(EnumType.STRING)
 	private EQuantityUnit eQuantityUnit;
 	private BigDecimal price;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name ="contractor_id", referencedColumnName = "id")
-	private ContractorEntity contractorEntity;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name ="consumer_id", referencedColumnName = "id")
-	private ConsumerEntity consumerEntity;
-	
 	@ManyToOne
 	@JoinColumn(name = "docs_id")
 	private DocsEntity docsEntity;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "consumer_id")
+	private CounterpartyEntity counterpartyEntityConsumer;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "contractor_id")
+	private CounterpartyEntity counterpartyEntityContractor;
 }

@@ -3,14 +3,14 @@ package com.deekol.trafficdocsrest.domain;
 import java.time.LocalDate;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -30,11 +30,11 @@ public class DocsEntity {
 	@OneToMany(mappedBy = "docsEntity")
 	private Set<TripEntity> tripEntity;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name ="contractor_id", referencedColumnName = "id")
-	private ContractorEntity contractorEntity;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "consumer_id")
+	private CounterpartyEntity counterpartyEntityConsumer;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name ="consumer_id", referencedColumnName = "id")
-	private ConsumerEntity consumerEntity;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "contractor_id")
+	private CounterpartyEntity counterpartyEntityContractor;
 }

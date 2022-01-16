@@ -16,9 +16,11 @@ import com.deekol.trafficdocsrest.domain.enums.EStreetUnit;
 import com.deekol.trafficdocsrest.domain.enums.ESubFederalUnit;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @MappedSuperclass
 @Data
+@NoArgsConstructor
 public class Participant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -85,7 +87,6 @@ public class Participant {
 			String locationIndex, ESubFederalUnit eSubFederalUnit, String region, ESettlement eSettlement, String city,
 			EStreetUnit eStreetUnit, String street, EHouseUnit eHouseUnit, String house,
 			EAppartmentUnit eAppartmentUnit, String appartment) {
-		super();
 		this.eBusinessStructure = eBusinessStructure;
 		this.name = name;
 		this.email = email;
@@ -108,5 +109,35 @@ public class Participant {
 		this.eAppartmentUnit = eAppartmentUnit;
 		this.appartment = appartment;
 	}
-	
+
+	public Participant(Long id, EBusinessStructure eBusinessStructure, String name, String email, String inn,
+			String kpp, EBusinessStructure eBusinessStructureBank, String bank, String bik, String accountOfBank,
+			String account, String locationIndex, ESubFederalUnit eSubFederalUnit, String region,
+			ESettlement eSettlement, String city, EStreetUnit eStreetUnit, String street, EHouseUnit eHouseUnit,
+			String house, EAppartmentUnit eAppartmentUnit, String appartment) {
+		super();
+		this.id = id;
+		this.eBusinessStructure = eBusinessStructure;
+		this.name = name;
+		this.email = email;
+		this.inn = inn;
+		this.kpp = kpp;
+		this.eBusinessStructureBank = eBusinessStructureBank;
+		this.bank = bank;
+		this.bik = bik;
+		this.accountOfBank = accountOfBank;
+		this.account = account;
+		this.locationIndex = locationIndex;
+		this.eSubFederalUnit = eSubFederalUnit;
+		this.region = region;
+		this.eSettlement = eSettlement;
+		this.city = city;
+		this.eStreetUnit = eStreetUnit;
+		this.street = street;
+		this.eHouseUnit = eHouseUnit;
+		this.house = house;
+		this.eAppartmentUnit = eAppartmentUnit;
+		this.appartment = appartment;
+	}
+
 }
