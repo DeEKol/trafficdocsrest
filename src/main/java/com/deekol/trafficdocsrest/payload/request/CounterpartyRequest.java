@@ -2,6 +2,7 @@ package com.deekol.trafficdocsrest.payload.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class CounterpartyRequest {
 	private String name;
 	@NotBlank
 	@Email
+	@Size(max = 50)
 	private String email;
 	@NotBlank
 	private String inn;

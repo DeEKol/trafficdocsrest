@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.deekol.trafficdocsrest.domain.enums.EQuantityUnit;
 
@@ -26,12 +28,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TripEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotBlank
 	private String itinerary;
+	@NotBlank
 	private LocalDate date;
+	@NotBlank
 	private Integer quantity;
 	
+	@NotBlank
+	@Size(max = 10)
 	@Column(name = "quantity_unit")
 	@Enumerated(EnumType.STRING)
 	private EQuantityUnit eQuantityUnit;
@@ -41,10 +48,12 @@ public class TripEntity {
 	@JoinColumn(name = "docs_id")
 	private DocsEntity docsEntity;
 	
+	@NotBlank
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "consumer_id")
 	private CounterpartyEntity counterpartyEntityConsumer;
 	
+	@NotBlank
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contractor_id")
 	private CounterpartyEntity counterpartyEntityContractor;

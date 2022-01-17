@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 
@@ -20,9 +21,10 @@ import lombok.Data;
 @Data
 public class DocsEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	private LocalDate date;
 	private Boolean post;
 	private Boolean pay;
@@ -30,10 +32,12 @@ public class DocsEntity {
 	@OneToMany(mappedBy = "docsEntity")
 	private Set<TripEntity> tripEntity;
 	
+	@NotBlank
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "consumer_id")
 	private CounterpartyEntity counterpartyEntityConsumer;
 	
+	@NotBlank
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contractor_id")
 	private CounterpartyEntity counterpartyEntityContractor;

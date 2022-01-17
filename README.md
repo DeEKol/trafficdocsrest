@@ -38,3 +38,11 @@ GET **/api/test/all** Retrieve public content </br>
 GET **/api/test/user** Access User’s content </br>
 GET **/api/test/mod** Access Moderator’s content </br>
 GET **/api/test/admin** Access Admin’s content </br>
+
+### Roles
+
+```
+INSERT INTO roles (name) VALUES ('ROLE_USER');
+INSERT INTO roles (name) VALUES ('ROLE_MODERATOR');
+INSERT INTO roles (name) VALUES ('ROLE_ADMIN');
+```
