@@ -13,8 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import com.deekol.trafficdocsrest.domain.enums.EAppartmentUnit;
 import com.deekol.trafficdocsrest.domain.enums.EBusinessStructure;
@@ -24,7 +22,10 @@ import com.deekol.trafficdocsrest.domain.enums.ESettlement;
 import com.deekol.trafficdocsrest.domain.enums.EStreetUnit;
 import com.deekol.trafficdocsrest.domain.enums.ESubFederalUnit;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
@@ -35,86 +36,64 @@ import lombok.Data;
 				@UniqueConstraint(columnNames = "inn"),
 				@UniqueConstraint(columnNames = "account")
 		})
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CounterpartyEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotBlank
-	@Size(max = 3)
 	@Column(name = "business_structure")
 	@Enumerated(EnumType.STRING)
 	private EBusinessStructure eBusinessStructure;
 	
-	@NotBlank
-	@Size(max = 120)
 	private String name;
-	@Size(max = 50)
-	@NotBlank
 	private String email;
-	@Size(max = 15)
-	@NotBlank
 	private String inn;
-	@Size(max = 15)
-	@NotBlank
 	private String kpp;
 	
-	@NotBlank
 	@Column(name = "participant")
 	@Enumerated(EnumType.STRING)
 	private EParticipant eParticipant;
 	
-	@NotBlank
 	@Column(name = "business_structure_bank")
 	@Enumerated(EnumType.STRING)
 	private EBusinessStructure eBusinessStructureBank;
 	
-	@NotBlank
 	private String bank;
-	@NotBlank
 	private String bik;
 	
-	@NotBlank
 	@Column(name = "account_of_bank")
 	private String accountOfBank;
 	
-	@NotBlank
 	private String account;
 	
-	@NotBlank
 	@Column(name = "location_index")
 	private String locationIndex;
 	
-	@NotBlank
 	@Column(name = "sub_federal_unit")
 	@Enumerated(EnumType.STRING)
 	private ESubFederalUnit eSubFederalUnit;
 	
-	@NotBlank
 	private String region;
 	
-	@NotBlank
 	@Column(name = "settlement")
 	@Enumerated(EnumType.STRING)
 	private ESettlement eSettlement;
 	
-	@NotBlank
 	private String city;
 	
-	@NotBlank
 	@Column(name = "street_unit")
 	@Enumerated(EnumType.STRING)
-	private EStreetUnit eStreetUnit = EStreetUnit.УЛИЦА;
+	private EStreetUnit eStreetUnit;
 	
-	@NotBlank
 	private String street;
 	
-	@NotBlank
 	@Column(name = "house_unit")
 	@Enumerated(EnumType.STRING)
-	private EHouseUnit eHouseUnit = EHouseUnit.ДОМ;
+	private EHouseUnit eHouseUnit;
 	
-	@NotBlank
 	private String house;
 	
 	@Column(name = "appartment_unit")

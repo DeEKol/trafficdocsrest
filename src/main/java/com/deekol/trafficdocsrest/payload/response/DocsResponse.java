@@ -1,6 +1,5 @@
 package com.deekol.trafficdocsrest.payload.response;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
@@ -11,17 +10,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class TripResponse {
+public class DocsResponse {
 	private Long id;
-	private String itinerary;
 	private LocalDate date;
-	private Integer quantity;
-	private String quantityUnit;
-	private BigDecimal price;
+	private Boolean post;
+	private Boolean pay;
 	private String consumer;
 	private String contractor;
-	private Long docsId;
 }

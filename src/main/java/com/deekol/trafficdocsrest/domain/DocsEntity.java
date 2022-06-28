@@ -12,33 +12,35 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "docs")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class DocsEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotBlank
 	private LocalDate date;
 	private Boolean post;
 	private Boolean pay;
 	
-	@OneToMany(mappedBy = "docsEntity")
-	private Set<TripEntity> tripEntity;
-	
-	@NotBlank
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "consumer_id")
 	private CounterpartyEntity counterpartyEntityConsumer;
 	
-	@NotBlank
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contractor_id")
 	private CounterpartyEntity counterpartyEntityContractor;
+
+	@OneToMany(mappedBy = "docsEntity")
+	private Set<TripEntity> tripEntity;
 }
