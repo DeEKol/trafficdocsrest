@@ -1,5 +1,8 @@
 # trafficdocsrest
-Spring boot project
+Spring boot project.</br>
+Приложение для ТК: работа с документами, рейсами.</br>
+Авторизация с refresh token'ом и правами пользователей.</br>
+Технологии: java, spring, sql, hibernate, lombok.
 
 ### REST api
 **Authorization(refresh token):**

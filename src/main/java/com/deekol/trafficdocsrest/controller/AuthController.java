@@ -37,11 +37,10 @@ import com.deekol.trafficdocsrest.security.model.UserEntity;
 import com.deekol.trafficdocsrest.security.service.RefreshTokenService;
 import com.deekol.trafficdocsrest.security.service.UserDetailsImpl;
 
-
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 @AllArgsConstructor
+@CrossOrigin
 public class AuthController {
 	private final AuthenticationManager authenticationManager;
 	private final UserRepository userRepository;
