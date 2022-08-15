@@ -17,9 +17,9 @@ public class DocsRequest {
 	@NotNull
 	private LocalDate date;
 	@NotNull
-	private Boolean post;
+	private String post;
 	@NotNull
-	private Boolean pay;
+	private String pay;
 	
 	@NotBlank
 	private String consumer;

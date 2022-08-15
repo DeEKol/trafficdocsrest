@@ -41,7 +41,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CounterpartyEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name = "business_structure")

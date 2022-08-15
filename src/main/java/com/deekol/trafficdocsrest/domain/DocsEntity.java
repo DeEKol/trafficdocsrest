@@ -3,7 +3,10 @@ package com.deekol.trafficdocsrest.domain;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.deekol.trafficdocsrest.domain.enums.EPay;
+import com.deekol.trafficdocsrest.domain.enums.EPost;
+import com.deekol.trafficdocsrest.domain.enums.EQuantityUnit;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,12 +33,18 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DocsEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private LocalDate date;
-	private Boolean post;
-	private Boolean pay;
+	
+	@Column(name = "post")
+	@Enumerated(EnumType.STRING)
+	private EPost ePost;
+	
+	@Column(name = "pay")
+	@Enumerated(EnumType.STRING)
+	private EPay ePay;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "consumer_id")

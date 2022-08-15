@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TripEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String itinerary;
 	private LocalDate date;

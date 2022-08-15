@@ -80,9 +80,9 @@ public class CounterpartyRequest {
 	@NotBlank
 	private String house;
 	
-	@NotBlank
+//	@NotBlank
 	private String appartmentUnit;
 	
-	@NotBlank
+//	@NotBlank
 	private String appartment;
 }

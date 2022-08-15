@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/api/counterparty")
 @AllArgsConstructor
+@CrossOrigin
 public class CounterpartyController {
 	private final CounterpartyRepository counterpartyRepository;
 	
@@ -107,7 +109,8 @@ public class CounterpartyController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> create(@Valid @RequestBody CounterpartyRequest counterpartyRequest) {
+	
+	public /*ResponseEntity<?>*/ CounterpartyEntity create(@Valid @RequestBody CounterpartyRequest counterpartyRequest) {
 //		CounterpartyEntity counterpartyEntity = new CounterpartyEntity();
 //		
 //		counterpartyEntity.setEBusinessStructure(EBusinessStructure.valueOf(counterpartyRequest.getBusinessStructure()));
@@ -158,13 +161,13 @@ public class CounterpartyController {
 				.appartment(counterpartyRequest.getAppartment())
 				.build();
 		
-		counterpartyRepository.save(counterpartyEntity);
+		return counterpartyRepository.save(counterpartyEntity);
 		
-		return ResponseEntity.ok(new MessageResponse("Counterparty added successfully!"));
+//		return ResponseEntity.ok(new MessageResponse("Counterparty added successfully!"));
 	}
 	
 	@PutMapping("{id}")
-	public ResponseEntity<?> update(@PathVariable("id") CounterpartyEntity counterpartyFromDb, @Valid @RequestBody CounterpartyRequest counterpartyRequest) {
+	public /*ResponseEntity<?>*/ CounterpartyResponse update(@PathVariable("id") CounterpartyEntity counterpartyFromDb, @Valid @RequestBody CounterpartyRequest counterpartyRequest) {
 		CounterpartyEntity counterpartyEntity = new CounterpartyEntity();
 		
 		counterpartyEntity.setEBusinessStructure(EBusinessStructure.valueOf(counterpartyRequest.getBusinessStructure()));
@@ -193,7 +196,34 @@ public class CounterpartyController {
 		BeanUtils.copyProperties(counterpartyEntity, counterpartyFromDb, "id");
 		counterpartyRepository.save(counterpartyFromDb);
 		
-		return ResponseEntity.ok(new MessageResponse("Counterparty updated successfully!"));
+		CounterpartyResponse counterpartyResponse = new CounterpartyResponse();
+		counterpartyResponse.setId(counterpartyFromDb.getId());
+		counterpartyResponse.setBusinessStructure(counterpartyEntity.getEBusinessStructure().toString());
+		counterpartyResponse.setName(counterpartyEntity.getName());
+		counterpartyResponse.setEmail(counterpartyEntity.getEmail());
+		counterpartyResponse.setInn(counterpartyEntity.getInn());
+		counterpartyResponse.setKpp(counterpartyEntity.getKpp());
+		counterpartyResponse.setParticipant(counterpartyEntity.getEParticipant().toString());
+		counterpartyResponse.setBusinessStructureBank(counterpartyEntity.getEBusinessStructureBank().toString());
+		counterpartyResponse.setBank(counterpartyEntity.getBank());
+		counterpartyResponse.setBik(counterpartyEntity.getBik());
+		counterpartyResponse.setAccountOfBank(counterpartyEntity.getAccountOfBank());
+		counterpartyResponse.setAccount(counterpartyEntity.getAccount());
+		counterpartyResponse.setLocationIndex(counterpartyEntity.getLocationIndex());
+		counterpartyResponse.setSubFederalUnit(counterpartyEntity.getESubFederalUnit().toString());
+		counterpartyResponse.setRegion(counterpartyEntity.getRegion());
+		counterpartyResponse.setSettlement(counterpartyEntity.getESettlement().toString());
+		counterpartyResponse.setCity(counterpartyEntity.getCity());
+		counterpartyResponse.setStreetUnit(counterpartyEntity.getEStreetUnit().toString());
+		counterpartyResponse.setStreet(counterpartyEntity.getStreet());
+		counterpartyResponse.setHouseUnit(counterpartyEntity.getEHouseUnit().toString());
+		counterpartyResponse.setHouse(counterpartyEntity.getHouse());
+		counterpartyResponse.setAppartmentUnit(counterpartyEntity.getEAppartmentUnit().toString());
+		counterpartyResponse.setAppartment(counterpartyEntity.getAppartment());
+		
+		return counterpartyResponse;
+		
+//		return ResponseEntity.ok(new MessageResponse("Counterparty updated successfully!"));
 	}
 	
 	@DeleteMapping("{id}")

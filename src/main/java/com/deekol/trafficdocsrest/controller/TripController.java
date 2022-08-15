@@ -91,12 +91,12 @@ public class TripController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> create(@Valid @RequestBody TripRequest tripRequest) {
+	public /*ResponseEntity<?>*/ TripResponse create(@Valid @RequestBody TripRequest tripRequest) {
 		DocsEntity docsEntity = null;
 			
-			if (tripRequest.getDocsId() != null) {
-				docsEntity = docsRepository.getById(tripRequest.getDocsId());
-			}
+		if (tripRequest.getDocsId() != null) {
+			docsEntity = docsRepository.getById(tripRequest.getDocsId());
+		}
 		
 		TripEntity tripEntity = TripEntity.builder()
 				.itinerary(tripRequest.getItinerary())
@@ -109,13 +109,29 @@ public class TripController {
 				.docsEntity(docsEntity)
 				.build();
 		
-		tripRepository.save(tripEntity);
+		TripEntity newTrip = tripRepository.save(tripEntity);
 		
-		return ResponseEntity.ok(new MessageResponse("Trip added successfully!"));
+		TripResponse tripResponse = new TripResponse();
+		tripResponse.setId(newTrip.getId());
+		tripResponse.setItinerary(tripEntity.getItinerary());
+		tripResponse.setDate(tripEntity.getDate());
+		tripResponse.setQuantity(tripEntity.getQuantity());
+		tripResponse.setQuantityUnit(tripEntity.getEQuantityUnit().toString());
+		tripResponse.setPrice(tripEntity.getPrice());
+		tripResponse.setConsumer(tripEntity.getCounterpartyEntityConsumer().getName());
+		tripResponse.setContractor(tripEntity.getCounterpartyEntityContractor().getName());
+		
+		if (tripEntity.getDocsEntity() != null) {
+			tripResponse.setDocsId(tripEntity.getDocsEntity().getId());
+		}
+		
+		return tripResponse;
+		
+//		return ResponseEntity.ok(new MessageResponse("Trip added successfully!"));
 	}
 	
 	@PutMapping("{id}")
-	public ResponseEntity<?> update(@PathVariable("id") TripEntity tripFromDb, @Valid @RequestBody TripRequest tripRequest) {
+	public /*ResponseEntity<?>*/ TripResponse update(@PathVariable("id") TripEntity tripFromDb, @Valid @RequestBody TripRequest tripRequest) {
 		DocsEntity docsEntity = null;
 		if (tripRequest.getDocsId() != null) {
 			docsEntity = docsRepository.getById(tripRequest.getDocsId());
@@ -135,11 +151,46 @@ public class TripController {
 		BeanUtils.copyProperties(tripEntity, tripFromDb, "id");
 		tripRepository.save(tripFromDb);
 		
-		return ResponseEntity.ok(new MessageResponse("Trip updated successfully!"));
+		Long docsResponse = null;
+		if (tripEntity.getDocsEntity() != null) {
+			docsResponse = tripEntity.getDocsEntity().getId();
+		}
+		
+		TripResponse tripResponse = TripResponse.builder()
+				.id(tripFromDb.getId())
+				.itinerary(tripEntity.getItinerary())
+				.date(tripEntity.getDate())
+				.quantity(tripEntity.getQuantity())
+				.quantityUnit(tripEntity.getEQuantityUnit().toString())
+				.price(tripEntity.getPrice())
+				.consumer(tripEntity.getCounterpartyEntityConsumer().getName())
+				.contractor(tripEntity.getCounterpartyEntityContractor().getName())
+				.docsId(docsResponse)
+				.build();
+		
+//		TripResponse tripResponse = new TripResponse();
+//		tripResponse.setId(tripFromDb.getId());
+//		tripResponse.setItinerary(tripEntity.getItinerary());
+//		tripResponse.setDate(tripEntity.getDate());
+//		tripResponse.setQuantity(tripEntity.getQuantity());
+//		tripResponse.setQuantityUnit(tripEntity.getEQuantityUnit().toString());
+//		tripResponse.setPrice(tripEntity.getPrice());
+//		tripResponse.setConsumer(tripEntity.getCounterpartyEntityConsumer().getName());
+//		tripResponse.setContractor(tripEntity.getCounterpartyEntityContractor().getName());
+//		
+//		if (tripEntity.getDocsEntity() != null) {
+//			tripResponse.setDocsId(tripEntity.getDocsEntity().getId());
+//		}
+		
+		return tripResponse;
+		
+//		return ResponseEntity.ok(new MessageResponse("Trip updated successfully!"));
 	}
 	
 	@DeleteMapping("{id}")
-	public void delete(@PathVariable("id") TripEntity tripEntity) {
+	public ResponseEntity<?> delete(@PathVariable("id") TripEntity tripEntity) {
 		tripRepository.delete(tripEntity);
+		
+		return ResponseEntity.ok(new MessageResponse("Trip deleted successfully!"));
 	}
 }

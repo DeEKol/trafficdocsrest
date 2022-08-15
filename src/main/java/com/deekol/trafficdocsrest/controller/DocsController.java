@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deekol.trafficdocsrest.domain.DocsEntity;
+import com.deekol.trafficdocsrest.domain.enums.EPay;
+import com.deekol.trafficdocsrest.domain.enums.EPost;
 import com.deekol.trafficdocsrest.payload.request.DocsRequest;
 import com.deekol.trafficdocsrest.payload.response.DocsResponse;
 import com.deekol.trafficdocsrest.payload.response.MessageResponse;
@@ -28,6 +31,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/api/docs")
 @AllArgsConstructor
+@CrossOrigin
 public class DocsController {
 	private final DocsRepository docsRepository;
 	private final CounterpartyRepository counterpartyRepository;
@@ -42,8 +46,8 @@ public class DocsController {
 			DocsResponse docsResponse = DocsResponse.builder()
 					.id(docsEntity.getId())
 					.date(docsEntity.getDate())
-					.post(docsEntity.getPost())
-					.pay(docsEntity.getPay())
+					.post(docsEntity.getEPost().toString())
+					.pay(docsEntity.getEPay().toString())
 					.consumer(docsEntity.getCounterpartyEntityConsumer().getName())
 					.contractor(docsEntity.getCounterpartyEntityContractor().getName())
 					.build();
@@ -59,8 +63,8 @@ public class DocsController {
 		DocsResponse docsResponse = DocsResponse.builder()
 				.id(docsEntity.getId())
 				.date(docsEntity.getDate())
-				.post(docsEntity.getPost())
-				.pay(docsEntity.getPay())
+				.post(docsEntity.getEPost().toString())
+				.pay(docsEntity.getEPay().toString())
 				.consumer(docsEntity.getCounterpartyEntityConsumer().getName())
 				.contractor(docsEntity.getCounterpartyEntityContractor().getName())
 				.build();
@@ -69,25 +73,38 @@ public class DocsController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> create(@Valid @RequestBody DocsRequest docsRequest) {
+	public /*ResponseEntity<?>*/ DocsResponse create(@Valid @RequestBody DocsRequest docsRequest) {
+		
 		DocsEntity docsEntity = DocsEntity.builder()
 				.date(docsRequest.getDate())
-				.post(docsRequest.getPost())
-				.pay(docsRequest.getPay())
+				.ePost(EPost.valueOf(docsRequest.getPost()))
+				.ePay(EPay.valueOf(docsRequest.getPay()))
 				.counterpartyEntityConsumer(counterpartyRepository.findByName(docsRequest.getConsumer()))
 				.counterpartyEntityContractor(counterpartyRepository.findByName(docsRequest.getContractor()))				
 				.build();
 		
-		docsRepository.save(docsEntity);
-		return ResponseEntity.ok(new MessageResponse("Docs added successfully!"));
+		DocsEntity newDocs = docsRepository.save(docsEntity);
+		
+		DocsResponse docsResponse = DocsResponse.builder()
+				.id(newDocs.getId())
+				.date(docsEntity.getDate())
+				.post(docsEntity.getEPost().toString())
+				.pay(docsEntity.getEPay().toString())
+				.consumer(docsEntity.getCounterpartyEntityConsumer().getName())
+				.contractor(docsEntity.getCounterpartyEntityContractor().getName())
+				.build();
+		
+		return docsResponse;
+		
+//		return ResponseEntity.ok(new MessageResponse("Docs added successfully!"));
 	}
 	
 	@PutMapping("{id}")
-	public ResponseEntity<?> update(@PathVariable("id") DocsEntity docsFromDb, @Valid @RequestBody DocsRequest docsRequest) {
+	public /*ResponseEntity<?>*/ DocsResponse update(@PathVariable("id") DocsEntity docsFromDb, @Valid @RequestBody DocsRequest docsRequest) {
 		DocsEntity docsEntity = DocsEntity.builder()
 				.date(docsRequest.getDate())
-				.post(docsRequest.getPost())
-				.pay(docsRequest.getPay())
+				.ePost(EPost.valueOf(docsRequest.getPost()))
+				.ePay(EPay.valueOf(docsRequest.getPay()))
 				.counterpartyEntityConsumer(counterpartyRepository.findByName(docsRequest.getConsumer()))
 				.counterpartyEntityContractor(counterpartyRepository.findByName(docsRequest.getContractor()))				
 				.build();
@@ -95,7 +112,18 @@ public class DocsController {
 		BeanUtils.copyProperties(docsEntity, docsFromDb, "id");
 		docsRepository.save(docsFromDb);
 		
-		return ResponseEntity.ok(new MessageResponse("Docs updated successfully!"));
+		DocsResponse docsResponse = DocsResponse.builder()
+				.id(docsFromDb.getId())
+				.date(docsEntity.getDate())
+				.post(docsEntity.getEPost().toString())
+				.pay(docsEntity.getEPay().toString())
+				.consumer(docsEntity.getCounterpartyEntityConsumer().getName())
+				.contractor(docsEntity.getCounterpartyEntityContractor().getName())
+				.build();
+		
+		return docsResponse;
+		
+//		return ResponseEntity.ok(new MessageResponse("Docs updated successfully!"));
 	}
 	
 	@DeleteMapping("{id}")

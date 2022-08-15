@@ -16,8 +16,8 @@ import lombok.Setter;
 public class DocsResponse {
 	private Long id;
 	private LocalDate date;
-	private Boolean post;
-	private Boolean pay;
+	private String post;
+	private String pay;
 	private String consumer;
 	private String contractor;
 }
