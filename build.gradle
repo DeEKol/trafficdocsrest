@@ -29,6 +29,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.2'
+	implementation 'org.apache.poi:poi-scratchpad:5.2.2'
 }
 
 test {
