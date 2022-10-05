@@ -12,9 +12,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 
+import com.deekol.trafficdocsrest.domain.DocsEntity;
+import com.deekol.trafficdocsrest.domain.TripEntity;
+
 public class Act {
+	
 	private final static int startRow = 2;
-	static void sheetFilling(Workbook wb, Sheet sheet, List<List<Object>> denominationList) throws IOException {
+	static void sheetFilling(Workbook wb, Sheet sheet, List<TripEntity> denominationList) throws IOException {
 		DocBody docBody = new DocBody(wb, sheet, startRow, denominationList);
 		
 		
@@ -30,7 +34,14 @@ public class Act {
 		Row row11 = sheet.createRow(startRow);
 		Cell cell1r11 = row11.createCell(1);
 		cell1r11.setCellStyle(arial14LCB);
-		cell1r11.setCellValue("Акт № 0 от 00 января 0000 г.");
+		
+		DocsEntity docsEntity = denominationList.get(0).getDocsEntity();
+		long numberAct = docsEntity.getId();
+		int dayAct = docsEntity.getDate().getDayOfMonth();
+		String monthAct = DocsUtils.monthEngToRu(docsEntity.getDate().getMonth());
+		int yearAct = docsEntity.getDate().getYear();
+		
+		cell1r11.setCellValue("Акт № " + numberAct + " от " + dayAct + " " + monthAct + " " + yearAct + " г.");
 		
 		int c = denominationList.size();
 		
@@ -55,10 +66,17 @@ public class Act {
 		Row rowInitials = sheet.createRow(startRow+19 + c);
 		Cell cellrowInitials1 = rowInitials.createCell(1);
 		cellrowInitials1.setCellStyle(arial9LT);
-		cellrowInitials1.setCellValue("ИП Иванов Иван Иванович");
+		
+		//Блок повторяется в bill
+		DocsEntity docs = denominationList.get(0).getDocsEntity();
+		String contractorBS = docs.getCounterpartyEntityContractor().getEBusinessStructure().toString();
+		String contractorName = docs.getCounterpartyEntityContractor().getName();
+		String contractorDescr = contractorBS + " " + contractorName;
+		
+		cellrowInitials1.setCellValue(contractorDescr);
 		Cell cellrowInitials2 = rowInitials.createCell(17);
 		cellrowInitials2.setCellStyle(arial9LT);
-		cellrowInitials2.setCellValue("ИП Петров Пётр Петрович");
+//		cellrowInitials2.setCellValue("ИП Петров Пётр Петрович");
 		
 		//Границы
 //		RegionUtil.setBorderTop(BorderStyle.MEDIUM , CellRangeAddress.valueOf("$B$" + (startRow+15 + c) + ":$AB$" + (startRow+15 + c)), sheet);

@@ -13,13 +13,16 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 
+import com.deekol.trafficdocsrest.domain.CounterpartyEntity;
+import com.deekol.trafficdocsrest.domain.TripEntity;
+
 public class DocBody {
 	int startRow;
 	Workbook wb;
 	Sheet sheet;
-	List<List<Object>> denominationList;
+	List<TripEntity> denominationList;
 	
-	DocBody(Workbook wb, Sheet sheet,  int startRow, List<List<Object>> denominationList) {
+	DocBody(Workbook wb, Sheet sheet,  int startRow, List<TripEntity> denominationList) {
 		this.wb = wb;
 		this.sheet = sheet;
 		this.startRow = startRow;
@@ -65,7 +68,16 @@ public class DocBody {
 		
 		Cell cell6r14 = row14.createCell(5);
 		cell6r14.setCellStyle(arial9LTBW);
-		cell6r14.setCellValue("'ООО' Рога и Копыта");
+		
+		//Описание поставщика
+		CounterpartyEntity contractor = denominationList.get(0).getCounterpartyEntityContractor();
+		String contractorBusinessStructure = contractor.getEBusinessStructure().toString();
+		String contractorName = contractor.getName();
+		String contractorDescription = contractorBusinessStructure + " " + contractorName + ", ";
+		
+		cell6r14.setCellValue(contractorDescription);
+		
+		
 	//Покупатель
 		sheet.addMergedRegion(new CellRangeAddress(startRow+5, startRow+5, 5, 27));
 		Row row16 = sheet.createRow(startRow+5);
@@ -76,7 +88,14 @@ public class DocBody {
 		
 		Cell cell6r16 = row16.createCell(5);
 		cell6r16.setCellStyle(arial9LTBW);
-		cell6r16.setCellValue("'ООО' Копыта и Рога");
+		
+		//Описание поставщика
+		CounterpartyEntity consumer = denominationList.get(0).getCounterpartyEntityConsumer();
+		String consumerBusinessStructure = consumer.getEBusinessStructure().toString();
+		String consumerName = consumer.getName();
+		String consumerDescription = consumerBusinessStructure + " " + consumerName + ", ";
+		
+		cell6r16.setCellValue(consumerDescription);
 		
 	//Услуги
 		//Шапка
@@ -193,7 +212,7 @@ public class DocBody {
 	}
 	
 	//Создание тела
-	private static void createDenomination(Workbook wb, Sheet sheet, List<List<Object>> list, int startRow) {
+	private static void createDenomination(Workbook wb, Sheet sheet, List<TripEntity> list, int startRow) {
 		//Шрифты
 		CellStyle arial8CT = FontStyles.createArial8CT(wb);
 		CellStyle arial8LTW = FontStyles.createArial8LTW(wb);
@@ -201,7 +220,7 @@ public class DocBody {
 		CellStyle arial8RTN = FontStyles.createArial8RTN(wb);
 		
 		int i = 0;
-		for(List<Object> denomination : list) {
+		for(TripEntity denomination : list) {
 			sheet.addMergedRegion(new CellRangeAddress(startRow+8+i, startRow+8+i, 2, 15));
 			sheet.addMergedRegion(new CellRangeAddress(startRow+8+i, startRow+8+i, 16, 17));
 			sheet.addMergedRegion(new CellRangeAddress(startRow+8+i, startRow+8+i, 18, 19));
@@ -210,9 +229,9 @@ public class DocBody {
 			
 			Row row = sheet.createRow(startRow+8+i);
 			
-			String name = (String)denomination.get(0);
+			String tripDescription = "Перевозка груза " + denomination.getDate() + " " + denomination.getItinerary();
 			
-			if (name.length() > 50) {
+			if (tripDescription.length() > 50) {
 				row.setHeightInPoints((float) 22.6);
 			}
 			
@@ -222,19 +241,19 @@ public class DocBody {
 			
 			Cell cell3 = row.createCell(2);
 			cell3.setCellStyle(arial8LTW);
-			cell3.setCellValue(name);
+			cell3.setCellValue(tripDescription);
 			
 			Cell cell17 = row.createCell(16);
 			cell17.setCellStyle(arial8RT);
-			cell17.setCellValue((int)denomination.get(1));
+			cell17.setCellValue((int)denomination.getQuantity());
 			
 			Cell cell19 = row.createCell(18);
 			cell19.setCellStyle(arial8RT);
-			cell19.setCellValue((String)denomination.get(2));
+			cell19.setCellValue(denomination.getEQuantityUnit().getTitle());
 			
 			Cell cell21 = row.createCell(20);
 			cell21.setCellStyle(arial8RTN);
-			cell21.setCellValue((double)denomination.get(3));
+			cell21.setCellValue(denomination.getPrice().doubleValue());
 			
 			Cell cell25 = row.createCell(24);
 			cell25.setCellStyle(arial8RTN);
@@ -244,12 +263,12 @@ public class DocBody {
 	}
 	
 	//Подсчет полной суммы услуг
-	private static double allSum(List<List<Object>> list) {
+	private static double allSum(List<TripEntity> list) {
 		List<Double> listd = new ArrayList<>();
 		double i = 0;
-		for(List<Object> e : list) {
-			int q = (int) e.get(1);
-			double price = (double) e.get(3);
+		for(TripEntity e : list) {
+			int q = (int) e.getQuantity();
+			double price = e.getPrice().doubleValue();
 			double fullPrice = q * price;
 			listd.add(fullPrice);
 		}

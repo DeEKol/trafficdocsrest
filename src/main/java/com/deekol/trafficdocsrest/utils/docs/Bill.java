@@ -12,6 +12,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 
+import com.deekol.trafficdocsrest.domain.DocsEntity;
+import com.deekol.trafficdocsrest.domain.TripEntity;
+
 /**
  * Класс Счёт.
  * Метод sheetFilling создаёт лист со счётом.
@@ -20,7 +23,7 @@ import org.apache.poi.ss.util.RegionUtil;
  */
 
 public class Bill {	
-	static void sheetFilling(Workbook wb, Sheet sheet, List<List<Object>> denominationList) throws IOException {
+	static void sheetFilling(Workbook wb, Sheet sheet, List<TripEntity> denominationList) throws IOException {
 		DocBody docBody = new DocBody(wb, sheet, 10, denominationList);
 		docBody.bodyFilling();
 		
@@ -36,7 +39,14 @@ public class Bill {
 		Row row3 = sheet.createRow(2);
 			Cell cell2r3 = row3.createCell(1);
 			cell2r3.setCellStyle(arial9LT);
-			cell2r3.setCellValue("ПАО «Сбербанк»");
+			
+			DocsEntity docs = denominationList.get(0).getDocsEntity();
+			String bankBS = docs.getCounterpartyEntityContractor().getEBusinessStructureBank().toString();
+			String bankName = docs.getCounterpartyEntityContractor().getBank();
+			String bankDescr = bankBS + " «" + bankName + "»";
+			
+			//Описание банка
+			cell2r3.setCellValue(bankDescr);
 			
 			Cell cell17r3 = row3.createCell(16);
 			cell17r3.setCellStyle(arial9LT);
@@ -44,7 +54,8 @@ public class Bill {
 			
 			Cell cell20r3 = row3.createCell(19);
 			cell20r3.setCellStyle(arial9LT);
-			cell20r3.setCellValue("000000000");
+			//бик
+			cell20r3.setCellValue(docs.getCounterpartyEntityContractor().getBik());
 			
 		Row row4 = sheet.createRow(3);
 			Cell cell17r4 = row4.createCell(16);
@@ -53,7 +64,8 @@ public class Bill {
 			
 			Cell cell20r4 = row4.createCell(19);
 			cell20r4.setCellStyle(arial9LT);
-			cell20r4.setCellValue("00000000000000000000");
+			//Счет банка
+			cell20r4.setCellValue(docs.getCounterpartyEntityContractor().getAccountOfBank());
 		
 		Row row5 = sheet.createRow(4);
 			Cell cell2r5 = row5.createCell(1);
@@ -67,11 +79,17 @@ public class Bill {
 			
 			Cell cell4r6 = row6.createCell(3);
 			cell4r6.setCellStyle(arial9LT);
-			cell4r6.setCellValue("000000000000");
+			//Инн
+			cell4r6.setCellValue(docs.getCounterpartyEntityContractor().getInn());
 			
 			Cell cell10r6 = row6.createCell(9);
 			cell10r6.setCellStyle(arial9LT);
 			cell10r6.setCellValue("КПП");
+			
+			Cell cell12r6 = row6.createCell(11);
+			cell12r6.setCellStyle(arial9LT);
+			//Кпп
+			cell12r6.setCellValue(docs.getCounterpartyEntityContractor().getKpp());
 		
 			Cell cell17r6 = row6.createCell(16);
 			cell17r6.setCellStyle(arial9LT);
@@ -79,12 +97,19 @@ public class Bill {
 			
 			Cell cell20r6 = row6.createCell(19);
 			cell20r6.setCellStyle(arial9LT);
-			cell20r6.setCellValue("00000000000000000000");
+			//Счет
+			cell20r6.setCellValue(docs.getCounterpartyEntityContractor().getAccount());
 			
 		Row row7 = sheet.createRow(6);
 			Cell cell2r7 = row7.createCell(1);
 			cell2r7.setCellStyle(arial9LT);
-			cell2r7.setCellValue("ИП Иванов Иван Иванович");
+			
+			String contractorBS = docs.getCounterpartyEntityContractor().getEBusinessStructure().toString();
+			String contractorName = docs.getCounterpartyEntityContractor().getName();
+			String contractorDescr = contractorBS + " " + contractorName;
+			
+			//Описание поставщика
+			cell2r7.setCellValue(contractorDescr);
 			
 		Row row9 = sheet.createRow(8);
 			Cell cell2r9 = row9.createCell(1);
@@ -114,7 +139,14 @@ public class Bill {
 		Row row11 = sheet.createRow(10);
 		Cell cell1r11 = row11.createCell(1);
 		cell1r11.setCellStyle(arial14LCB);
-		cell1r11.setCellValue("Счет на оплату № 0 от 00 января 0000 г.");		
+		
+		DocsEntity docsEntity = denominationList.get(0).getDocsEntity();
+		long numberAct = docsEntity.getId();
+		int dayAct = docsEntity.getDate().getDayOfMonth();
+		String monthAct = DocsUtils.monthEngToRu(docsEntity.getDate().getMonth());
+		int yearAct = docsEntity.getDate().getYear();
+		
+		cell1r11.setCellValue("Счет на оплату № " + numberAct + " от " + dayAct + " " + monthAct + " " + yearAct + " г.");		
 		
 		int c = denominationList.size(); //Количество наименований
 		
@@ -137,7 +169,7 @@ public class Bill {
 		
 		Cell cellSignature2 = rowSignation.createCell(13);
 		cellSignature2.setCellStyle(arial8LT);
-		cellSignature2.setCellValue("Иванов И.И.");
+//		cellSignature2.setCellValue("Иванов И.И.");
 		
 		RegionUtil.setBorderTop(BorderStyle.THIN , CellRangeAddress.valueOf("$F$" + (30 + c) + ":$P$" + (30 + c)), sheet);
 	}

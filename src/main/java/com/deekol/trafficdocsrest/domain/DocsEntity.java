@@ -18,7 +18,6 @@ import javax.persistence.Table;
 
 import com.deekol.trafficdocsrest.domain.enums.EPay;
 import com.deekol.trafficdocsrest.domain.enums.EPost;
-import com.deekol.trafficdocsrest.domain.enums.EQuantityUnit;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
