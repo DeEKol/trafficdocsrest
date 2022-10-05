@@ -29,8 +29,8 @@ public class DocsUtils {
 		this.tripRepository = tripRepository;
 	}
 	
-	public void createDocsUtil() {
-		List<TripEntity> tripEntityList = tripRepository.findTripByDocsId(1L);
+	public void createDocsUtil(Long docsId) {
+		List<TripEntity> tripEntityList = tripRepository.findTripByDocsId(docsId);
 				
 				
 				Workbook wb = new HSSFWorkbook();
