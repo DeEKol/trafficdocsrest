@@ -72,9 +72,9 @@ public class DocBody {
 		//Описание поставщика
 		CounterpartyEntity contractor = denominationList.get(0).getCounterpartyEntityContractor();
 		String contractorBusinessStructure = contractor.getEBusinessStructure().toString();
-		String contractorName = contractor.getName();
+		String contractorName = contractor.getEBusinessStructure().toString() == "ИП" ? contractor.getName() : "«" + contractor.getName() + "»";
 		String contractorInn = contractor.getInn();
-		String contractorKpp = contractor.getKpp() == null ? "" : ", КПП " + contractor.getKpp();
+		String contractorKpp = contractor.getEBusinessStructure().toString() == "ИП" ? "" : ", КПП " + contractor.getKpp();
 		String contractorLocationIndex = contractor.getLocationIndex();
 		String contractorESubFederalUnit = contractor.getESubFederalUnit().getTitle();
 		String contractorRegion = contractor.getRegion();
@@ -106,13 +106,32 @@ public class DocBody {
 		Cell cell6r16 = row16.createCell(5);
 		cell6r16.setCellStyle(arial9LTBW);
 		
-		//Описание поставщика
+		//Описание покупателя		
 		CounterpartyEntity consumer = denominationList.get(0).getCounterpartyEntityConsumer();
 		String consumerBusinessStructure = consumer.getEBusinessStructure().toString();
-		String consumerName = consumer.getName();
-		String consumerDescription = consumerBusinessStructure + " " + consumerName + ", ";
+		String consumerName = consumer.getEBusinessStructure().toString() == "ИП" ? consumer.getName() : "«" + consumer.getName() + "»";
+		String consumerInn = consumer.getInn();
+		String consumerKpp = consumer.getEBusinessStructure().toString() == "ИП" ? "" : ", КПП " + consumer.getKpp();
+		String consumerLocationIndex = consumer.getLocationIndex();
+		String consumerESubFederalUnit = consumer.getESubFederalUnit().getTitle();
+		String consumerRegion = consumer.getRegion();
+		String consumerESettlement = consumer.getESettlement().getTitle();
+		String consumerCity = consumer.getCity();
+		String consumerEStreetUnit = consumer.getEStreetUnit().getTitle();
+		String consumerStreet = consumer.getStreet();
+		String consumerEHouseUnit = consumer.getEHouseUnit().getTitle();
+		String consumerHouse = consumer.getHouse();
+		String consumerEAppartmentUnit = consumer.getEAppartmentUnit().getTitle() == null ? "" : ", " + consumer.getEAppartmentUnit().getTitle();
+		String consumerAppartment = consumer.getAppartment() == null ? "" : " " + consumer.getAppartment();
+		
+		String consumerDescription = consumerBusinessStructure + " " + consumerName + ", ИНН " + consumerInn + consumerKpp + ", " +
+				consumerLocationIndex + ", " + consumerESubFederalUnit + " " + consumerRegion + ", " + consumerESettlement + " " +
+				consumerCity + ", " + consumerEStreetUnit + " " + consumerStreet + ", " + consumerEHouseUnit + " " + consumerHouse +
+				consumerEAppartmentUnit + consumerAppartment;
 		
 		cell6r16.setCellValue(consumerDescription);
+		
+		
 		
 	//Услуги
 		//Шапка

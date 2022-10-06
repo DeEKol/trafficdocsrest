@@ -31,7 +31,7 @@ public class CounterpartyRequest {
 	@Size(max = 15)
 	private String inn;
 	
-	@NotBlank
+//	@NotBlank
 	@Size(max = 15)
 	private String kpp;
 	
