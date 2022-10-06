@@ -73,7 +73,24 @@ public class DocBody {
 		CounterpartyEntity contractor = denominationList.get(0).getCounterpartyEntityContractor();
 		String contractorBusinessStructure = contractor.getEBusinessStructure().toString();
 		String contractorName = contractor.getName();
-		String contractorDescription = contractorBusinessStructure + " " + contractorName + ", ";
+		String contractorInn = contractor.getInn();
+		String contractorKpp = contractor.getKpp() == null ? "" : ", КПП " + contractor.getKpp();
+		String contractorLocationIndex = contractor.getLocationIndex();
+		String contractorESubFederalUnit = contractor.getESubFederalUnit().getTitle();
+		String contractorRegion = contractor.getRegion();
+		String contractorESettlement = contractor.getESettlement().getTitle();
+		String contractorCity = contractor.getCity();
+		String contractorEStreetUnit = contractor.getEStreetUnit().getTitle();
+		String contractorStreet = contractor.getStreet();
+		String contractorEHouseUnit = contractor.getEHouseUnit().getTitle();
+		String contractorHouse = contractor.getHouse();
+		String contractorEAppartmentUnit = contractor.getEAppartmentUnit().getTitle() == null ? "" : ", " + contractor.getEAppartmentUnit().getTitle();
+		String contractorAppartment = contractor.getAppartment() == null ? "" : " " + contractor.getAppartment();
+		
+		String contractorDescription = contractorBusinessStructure + " " + contractorName + ", ИНН " + contractorInn + contractorKpp + ", " +
+				contractorLocationIndex + ", " + contractorESubFederalUnit + " " + contractorRegion + ", " + contractorESettlement + " " +
+				contractorCity + ", " + contractorEStreetUnit + " " + contractorStreet + ", " + contractorEHouseUnit + " " + contractorHouse +
+				contractorEAppartmentUnit + contractorAppartment;
 		
 		cell6r14.setCellValue(contractorDescription);
 		
